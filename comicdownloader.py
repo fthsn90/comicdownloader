@@ -31,7 +31,7 @@ class mypro():
         self.download = True
         self.sayi = 1
         self.minute = 20
-        self.what = """\n\n\n\n\t****Comic Downloader v.1.0****\n \t\n\tYou can download comic images from \n\t\n\thttp://www.readcomiconline.to/\n\t \n \t Also can convert them to Cbr!"""
+        self.what = """\n\n\n\n\t****Comic Downloader v.1.0****\n \t\n\tYou can download comic images from \n\t\n\thttp://www.readcomiconline.to/\n\t \n \t Also can convert these to Cbr!"""
         ####################
         self.topframe()
         self.urlframe()
@@ -91,7 +91,7 @@ class mypro():
     
     def indir(self,sayi):
         neredeyim = os.getcwd()
-        self.nereye = os.path.join(f"{neredeyim}",f"{self.issue}")
+        self.nereye = os.path.join(f"{neredeyim}",f"{self.name}")
         try:
             s = WebDriverWait(self.browser, self.minute).until(EC.presence_of_element_located((By.XPATH, f"//*[@id='divImage']/p[{self.sayi}]/img")))
             link = s.get_attribute('src')
@@ -109,14 +109,18 @@ class mypro():
         self.url = self.entri.get()
         self.comic = self.url.split("/")[4].replace("-"," ")
         self.issue = self.entri2.get()
-        self.klasor = os.mkdir(self.issue)
+        self.name = self.comic +"-"+ self.issue
+        self.klasor = os.mkdir(self.name)
         self.options.headless = True
 
         self.browser = webdriver.Firefox(options=self.options)
         self.browser.get(self.url)
         # CHANGE WİTH YOUR "uBlock0@raymondhill.net.xpi" PATH <<<<<<---------------------!!!!
-        self.browser.install_addon(r"C:\Users\fthsn\AppData\Roaming\Mozilla\Firefox\Profiles\bp5xt9qj.default-release\extensions\uBlock0@raymondhill.net.xpi")
-        
+        try:
+        	self.browser.install_addon(r"C:\Users\fthsn\AppData\Roaming\Mozilla\Firefox\Profiles\bp5xt9qj.default-release\extensions\uBlock0@raymondhill.net.xpi")
+        except:
+        	messagebox.showwarning("Warning","Look at 119. where is uBlock0@raymondhill.net.xpi? ")
+
         #get issue number
         self.s = WebDriverWait(self.browser, self.minute).until(EC.presence_of_element_located((By.LINK_TEXT, f"{self.comic} Issue #{self.issue}")))
         self.s.click()
@@ -148,10 +152,10 @@ class mypro():
             
             images = tuple(files)
             patoolib.create_archive(f"{self.nereye}/#{self.comic}-{self.issue}.cbr", images, verbosity=-1)
-            self.statusbar["text"] = "Convert Succeed!"
             for f in files:
                 os.remove(f)
             self.clear()
+            messagebox.showinfo("Info","Convert Succeed!")
         except:
             self.statusbar["text"] = "There is a problem!"
         
