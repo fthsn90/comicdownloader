@@ -151,7 +151,7 @@ class mypro():
                         files.append(os.path.join(r,file))
             
             images = tuple(files)
-            patoolib.create_archive(f"{self.nereye}/#{self.comic}-{self.issue}.cbr", images, verbosity=-1)
+            patoolib.create_archive(f"{self.nereye}/#{self.name}.cbr", images, verbosity=-1)
             for f in files:
                 os.remove(f)
             self.clear()
